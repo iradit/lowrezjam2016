@@ -1,0 +1,5 @@
+-cp /home/gogoprog/code/gengine2/deps/common/Ash-Haxe/src/
+-cp /home/gogoprog/code/gengine2/src/haxe/
+-cp .
+-main gengine.Main
+-js main.js
