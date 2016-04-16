@@ -42,9 +42,15 @@ class Application
     {
         trace("Application.start()");
 
-        untyped __js__("$('canvas').css('width', 512);");
-        untyped __js__("$('canvas').css('height', 512);");
+        untyped __js__("$('canvas').css('width', 320);");
+        untyped __js__("$('canvas').css('height', 320);");
+        untyped __js__("$('canvas').css('image-rendering', 'optimizeSpeed');");
+        untyped __js__("$('canvas').css('image-rendering', '-moz-crisp-edges');");
+        untyped __js__("$('canvas').css('image-rendering', '-webkit-optimize-contrast');");
+        untyped __js__("$('canvas').css('image-rendering', '-o-crisp-edges');");
+        untyped __js__("$('canvas').css('image-rendering', 'crisp-edges');");
         untyped __js__("$('canvas').css('image-rendering', 'pixelated');");
+        untyped __js__("$('canvas').css('-ms-interpolation-mode', 'nearest-neighbor');");
 
         engine.addSystem(new GameSystem(), 2);
 
