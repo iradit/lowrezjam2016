@@ -8,5 +8,5 @@ class FlyNode extends Node<FlyNode>
 {
     public var transform:Transform;
     public var fly:Fly;
-    public var staticSprite2D:StaticSprite2D;
+    public var sprite:AnimatedSprite2D;
 }

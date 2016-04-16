@@ -16,7 +16,7 @@ class GameSystem extends System
 {
     private var engine:Engine;
     private var flyNodes:NodeList<FlyNode>;
-    private var flySprite = Gengine.getResourceCache().getSprite2D('mosquito-medium.png', true);
+    private var flyAnim = Gengine.getResourceCache().getAnimationSet2D('mosquito.scml', true);
     private var timer:Float = 0;
 
     public function new()
@@ -59,9 +59,9 @@ class GameSystem extends System
         var position = new Vector3(Math.random() * 32, Math.random() * 32, 0);
         e.add(new Transform(position));
         e.add(new Fly());
-        e.add(new StaticSprite2D(flySprite));
+        e.add(new AnimatedSprite2D(flyAnim, "fly"));
 
-        e.get(StaticSprite2D).setLayer(10);
+        e.get(AnimatedSprite2D).setLayer(10);
         e.get(Fly).velocity = new Vector2(Math.random() * 10 - 5, Math.random() * 10 - 5);
         e.get(Fly).position = position;
         engine.addEntity(e);
