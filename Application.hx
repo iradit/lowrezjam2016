@@ -46,6 +46,7 @@ class Application
 
         engine.addSystem(new AttackSystem(), 2);
         engine.addSystem(new GameSystem(), 3);
+        engine.addSystem(new CollisionSystem(), 3);
 
         var entity:Entity;
 

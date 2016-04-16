@@ -41,7 +41,7 @@ class GameSystem extends System
             timer = 0;
         }
 
-        for (node in flyNodes)
+        for(node in flyNodes)
         {
             var position = node.fly.position;
             var velocity = node.fly.velocity;
