@@ -20,6 +20,10 @@ class AttackSystem extends System
     private var engine:Engine;
     private var state = "closed";
     private var time:Float;
+    private var startAngle:Float;
+    private var openedAngle:Float;
+    private var currentAngle:Float;
+    private var rotationSpeed:Float;
 
     public function new()
     {
@@ -48,12 +52,16 @@ class AttackSystem extends System
 
         if(state == "closed")
         {
-            if(Gengine.getInput().getScancodePress(44) || Gengine.getInput().getMouseButtonPress(1))
+            if(Gengine.getInput().getMouseButtonPress(1))
             {
+                engine.addEntity(tongueEntity);
+
+                startAngle = computeAngle();
+                tongueNode.transform.setRotation2D(startAngle);
+
                 headNode.animatedSprite2D.setAnimation("open", 2);
                 time = 0;
                 state = "opening";
-                engine.addEntity(tongueEntity);
             }
         }
         else if(state == "opening")
@@ -61,19 +69,29 @@ class AttackSystem extends System
             var tongue = tongueNode.tongue;
 
             time += dt;
-            tongueNode.transform.setScale(new Vector3((time / 0.5) * tongue.xScale, tongue.yScale, 1));
-            if(time > 0.5)
+            tongueNode.transform.setScale(new Vector3((time / tongue.openingDuration) * tongue.xScale, tongue.yScale, 1));
+            openedAngle = computeAngle();
+            tongueNode.transform.setRotation2D(openedAngle);
+
+            if(time > tongue.openingDuration)
             {
                 time = 0;
                 state = "opened";
+
+                var deltaAngle = openedAngle - getClosestAngle(startAngle, openedAngle);
+                currentAngle = openedAngle;
+                rotationSpeed = deltaAngle / 0.5;
             }
         }
         else if(state == "opened")
         {
             var tongue = tongueNode.tongue;
-
             time += dt;
-            if(time > 0.5)
+
+            currentAngle += rotationSpeed * dt;
+            tongueNode.transform.setRotation2D(currentAngle);
+
+            if(time > tongue.openedDuration)
             {
                 time = 0;
                 state = "closing";
@@ -85,8 +103,12 @@ class AttackSystem extends System
             var tongue = tongueNode.tongue;
 
             time += dt;
-            tongueNode.transform.setScale(new Vector3(((0.5 - time) / 0.5) * tongue.xScale, tongue.yScale, 1));
-            if(time > 0.5)
+            tongueNode.transform.setScale(new Vector3(((tongue.closingDuration - time) / tongue.closingDuration) * tongue.xScale, tongue.yScale, 1));
+
+            currentAngle += rotationSpeed * dt;
+            tongueNode.transform.setRotation2D(currentAngle);
+
+            if(time > tongue.closingDuration)
             {
                 time = 0;
                 state = "closed";
@@ -118,5 +140,44 @@ class AttackSystem extends System
     private function onTongueRemoved(node:TongueNode):Void
     {
         tongueNode = null;
+    }
+
+    private function computeAngle():Float
+    {
+        var mousePosition = Gengine.getInput().getMousePosition();
+        var worldPosition = new Vector2(mousePosition.x / Application.windowSize.x, mousePosition.y / Application.windowSize.y);
+        worldPosition.x -= 0.5;
+        worldPosition.y -= 0.5;
+        worldPosition.x *= 64;
+        worldPosition.y *= -64;
+
+        var mouthPosition = tongueNode.transform.position;
+        var delta = new Vector2(- mouthPosition.x + worldPosition.x, - mouthPosition.y + worldPosition.y);
+
+        var angle = Math.atan2(delta.y, delta.x) * 180/3.14159265;
+
+        return angle;
+    }
+
+    private function getClosestAngle(angle:Float, otherAngle:Float):Float
+    {
+        var
+            lowerAngle:Float,
+            upperAngle:Float;
+
+        lowerAngle = otherAngle - 180 + 0.001;
+        upperAngle = otherAngle + 180;
+
+        while ( angle > upperAngle )
+        {
+            angle -= 360;
+        }
+
+        while ( lowerAngle > angle )
+        {
+            angle += 360;
+        }
+
+        return angle;
     }
 }

@@ -7,11 +7,12 @@ import components.*;
 
 class Application
 {
+    public static var windowSize = new IntVector2(640, 640);
     public static function init()
     {
         trace("Application.init()");
 
-        Gengine.setWindowSize(new IntVector2(64, 64));
+        Gengine.setWindowSize(windowSize);
         Gengine.setWindowTitle("Chamosqui - lowrezjam2016");
     }
 
