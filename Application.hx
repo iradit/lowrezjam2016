@@ -36,11 +36,17 @@ class Application
 
         engine.addSystem(new AttackSystem(), 2);
 
-        var gameEntity:Entity = new Entity();
-        gameEntity.add(new Transform());
-        gameEntity.add(new AnimatedSprite2D(Gengine.getResourceCache().getAnimationSet2D('head.scml', true), "idle", 2));
-        gameEntity.add(new Head());
+        var entity:Entity;
 
-        engine.addEntity(gameEntity);
+        entity = new Entity();
+        entity.add(new Transform());
+        entity.add(new AnimatedSprite2D(Gengine.getResourceCache().getAnimationSet2D('bg.scml', true), "light"));
+        engine.addEntity(entity);
+
+        entity = new Entity();
+        entity.add(new Transform());
+        entity.add(new AnimatedSprite2D(Gengine.getResourceCache().getAnimationSet2D('head.scml', true), "idle", 2));
+        entity.add(new Head());
+        engine.addEntity(entity);
     }
 }
