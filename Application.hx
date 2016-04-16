@@ -2,37 +2,14 @@ import ash.core.*;
 import gengine.*;
 import gengine.components.*;
 import gengine.math.*;
-
-class GameSystem extends System
-{
-    public function new()
-    {
-        super();
-    }
-
-    override public function update(dt:Float):Void
-    {
-        if(Gengine.getInput().getScancodePress(41))
-        {
-            trace('Escaped just pressed.');
-            Gengine.exit();
-        }
-
-        if(Gengine.getInput().getMouseButtonDown(1))
-        {
-            var p = Gengine.getInput().getMousePosition();
-            trace('Mouse position : ' + p.x + ', ' + p.y);
-        }
-    }
-}
+import systems.*;
+import components.*;
 
 class Application
 {
     public static function init()
     {
         trace("Application.init()");
-
-        untyped __js__("$('#gui').remove();");
 
         Gengine.setWindowSize(new IntVector2(64, 64));
         Gengine.setWindowTitle("Chamosqui - lowrezjam2016");
@@ -42,21 +19,27 @@ class Application
     {
         trace("Application.start()");
 
-        untyped __js__("$('canvas').css('width', 320);");
-        untyped __js__("$('canvas').css('height', 320);");
-        untyped __js__("$('canvas').css('image-rendering', 'optimizeSpeed');");
-        untyped __js__("$('canvas').css('image-rendering', '-moz-crisp-edges');");
-        untyped __js__("$('canvas').css('image-rendering', '-webkit-optimize-contrast');");
-        untyped __js__("$('canvas').css('image-rendering', '-o-crisp-edges');");
-        untyped __js__("$('canvas').css('image-rendering', 'crisp-edges');");
-        untyped __js__("$('canvas').css('image-rendering', 'pixelated');");
-        untyped __js__("$('canvas').css('-ms-interpolation-mode', 'nearest-neighbor');");
+        untyped __js__("
+            if(typeof $ !== 'undefined') {
+                $('#gui').remove();
+                $('canvas').css('width', 320);
+                $('canvas').css('height', 320);
+                $('canvas').css('image-rendering', 'optimizeSpeed');
+                $('canvas').css('image-rendering', '-moz-crisp-edges');
+                $('canvas').css('image-rendering', '-webkit-optimize-contrast');
+                $('canvas').css('image-rendering', '-o-crisp-edges');
+                $('canvas').css('image-rendering', 'crisp-edges');
+                $('canvas').css('image-rendering', 'pixelated');
+                $('canvas').css('-ms-interpolation-mode', 'nearest-neighbor');
+            }
+        ");
 
-        engine.addSystem(new GameSystem(), 2);
+        engine.addSystem(new AttackSystem(), 2);
 
         var gameEntity:Entity = new Entity();
         gameEntity.add(new Transform());
-        gameEntity.add(new StaticSprite2D(Gengine.getResourceCache().getSprite2D('mockup.png', true)));
+        gameEntity.add(new AnimatedSprite2D(Gengine.getResourceCache().getAnimationSet2D('head.scml', true), "idle", 2));
+        gameEntity.add(new Head());
 
         engine.addEntity(gameEntity);
     }
