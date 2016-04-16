@@ -8,6 +8,7 @@ import ash.core.*;
 import gengine.nodes.*;
 import gengine.components.*;
 import gengine.Gengine;
+import gengine.math.*;
 import nodes.*;
 import components.*;
 
@@ -57,6 +58,7 @@ class AttackSystem extends System
         else if(state == "opening")
         {
             time += dt;
+            tongueNode.transform.setScale(new Vector3((time / 0.5) * 0.5, 0.5, 1));
             if(time > 0.5)
             {
                 time = 0;
@@ -76,6 +78,7 @@ class AttackSystem extends System
         else if(state == "closing")
         {
             time += dt;
+            tongueNode.transform.setScale(new Vector3(((0.5 - time) / 0.5) * 0.5, 1, 1));
             if(time > 0.5)
             {
                 time = 0;
@@ -94,5 +97,7 @@ class AttackSystem extends System
     {
         tongueNode = node;
         tongueNode.staticSprite2D.setLayer(100);
+        tongueNode.staticSprite2D.setUseHotSpot(true);
+        tongueNode.staticSprite2D.setHotSpot(new Vector2(0, 0.5));
     }
 }
