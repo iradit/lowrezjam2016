@@ -32,6 +32,8 @@ class Application
     {
         trace("Application.init()");
 
+        untyped __js__("$('#gui').remove();");
+
         Gengine.setWindowSize(new IntVector2(64, 64));
         Gengine.setWindowTitle("Chamosqui - lowrezjam2016");
     }
@@ -39,6 +41,10 @@ class Application
     public static function start(engine:Engine)
     {
         trace("Application.start()");
+
+        untyped __js__("$('canvas').css('width', 512);");
+        untyped __js__("$('canvas').css('height', 512);");
+        untyped __js__("$('canvas').css('image-rendering', 'pixelated');");
 
         engine.addSystem(new GameSystem(), 2);
 
