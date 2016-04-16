@@ -31,9 +31,10 @@ class AttackSystem extends System
         engine = _engine;
         engine.getNodeList(HeadNode).nodeAdded.add(onNodeAdded);
         engine.getNodeList(TongueNode).nodeAdded.add(onTongueAdded);
+        engine.getNodeList(TongueNode).nodeRemoved.add(onTongueRemoved);
 
         tongueEntity = new Entity();
-        tongueEntity.add(new Transform());
+        tongueEntity.add(new Transform(new Vector3(-100, 0, 0)));
         tongueEntity.add(new Tongue());
         tongueEntity.add(new StaticSprite2D(Gengine.getResourceCache().getSprite2D('tongue-large.png', true)));
     }
@@ -47,7 +48,7 @@ class AttackSystem extends System
 
         if(state == "closed")
         {
-            if(Gengine.getInput().getScancodePress(44))
+            if(Gengine.getInput().getScancodePress(44) || Gengine.getInput().getMouseButtonPress(1))
             {
                 headNode.animatedSprite2D.setAnimation("open", 2);
                 time = 0;
@@ -57,8 +58,10 @@ class AttackSystem extends System
         }
         else if(state == "opening")
         {
+            var tongue = tongueNode.tongue;
+
             time += dt;
-            tongueNode.transform.setScale(new Vector3((time / 0.5) * 0.5, 0.5, 1));
+            tongueNode.transform.setScale(new Vector3((time / 0.5) * tongue.xScale, tongue.yScale, 1));
             if(time > 0.5)
             {
                 time = 0;
@@ -67,6 +70,8 @@ class AttackSystem extends System
         }
         else if(state == "opened")
         {
+            var tongue = tongueNode.tongue;
+
             time += dt;
             if(time > 0.5)
             {
@@ -77,14 +82,21 @@ class AttackSystem extends System
         }
         else if(state == "closing")
         {
+            var tongue = tongueNode.tongue;
+
             time += dt;
-            tongueNode.transform.setScale(new Vector3(((0.5 - time) / 0.5) * 0.5, 1, 1));
+            tongueNode.transform.setScale(new Vector3(((0.5 - time) / 0.5) * tongue.xScale, tongue.yScale, 1));
             if(time > 0.5)
             {
                 time = 0;
                 state = "closed";
                 engine.removeEntity(tongueEntity);
             }
+        }
+
+        if(tongueNode != null)
+        {
+
         }
     }
 
@@ -96,8 +108,15 @@ class AttackSystem extends System
     private function onTongueAdded(node:TongueNode):Void
     {
         tongueNode = node;
+        tongueNode.transform.setPosition(new Vector3(-10, -2, 0));
+        tongueNode.transform.setScale(new Vector3(0, 0, 0));
         tongueNode.staticSprite2D.setLayer(100);
         tongueNode.staticSprite2D.setUseHotSpot(true);
         tongueNode.staticSprite2D.setHotSpot(new Vector2(0, 0.5));
+    }
+
+    private function onTongueRemoved(node:TongueNode):Void
+    {
+        tongueNode = null;
     }
 }
