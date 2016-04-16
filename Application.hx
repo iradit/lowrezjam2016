@@ -7,10 +7,19 @@ import components.*;
 
 class Application
 {
-    public static var windowSize = new IntVector2(640, 640);
+    public static var windowSize:IntVector2;
     public static function init()
     {
         trace("Application.init()");
+
+        untyped __js__("
+            if(typeof $ !== 'undefined') {
+                this.windowSize = new Module.IntVector2(64, 64);
+            }
+            else {
+                this.windowSize = new Module.IntVector2(640, 640);
+            }
+        ");
 
         Gengine.setWindowSize(windowSize);
         Gengine.setWindowTitle("Chamosqui - lowrezjam2016");
@@ -36,6 +45,7 @@ class Application
         ");
 
         engine.addSystem(new AttackSystem(), 2);
+        engine.addSystem(new GameSystem(), 3);
 
         var entity:Entity;
 
