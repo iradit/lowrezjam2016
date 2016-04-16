@@ -4,8 +4,8 @@
         <file id="0" name="head.png" width="27" height="38" pivot_x="0" pivot_y="0.5"/>
         <file id="1" name="head-open.png" width="27" height="41" pivot_x="0" pivot_y="0.5"/>
     </folder>
-    <entity id="0" name="entity_000">
-        <animation id="0" name="NewAnimation" length="200" interval="100">
+    <entity id="0" name="head">
+        <animation id="0" name="open" length="200" interval="100">
             <mainline>
                 <key id="0">
                     <object_ref id="0" timeline="0" key="0" z_index="0"/>
