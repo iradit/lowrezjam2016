@@ -18,6 +18,7 @@ class GameSystem extends System
     private var flyNodes:NodeList<FlyNode>;
     private var flyAnim = Gengine.getResourceCache().getAnimationSet2D('mosquito.scml', true);
     private var timer:Float = 0;
+    private var border = 40;
 
     public function new()
     {
@@ -48,10 +49,31 @@ class GameSystem extends System
                 var position = node.fly.position;
                 var velocity = node.fly.velocity;
 
+                if(position.x < - border)
+                {
+                    velocity.x = Math.random() * 20 + 5;
+                }
+                else if(position.x > border)
+                {
+                    velocity.x = Math.random() * - 20 - 5;
+                }
+
+                if(position.y < - border)
+                {
+                    velocity.y = Math.random() * 20 + 5;
+                }
+                else if(position.y > border)
+                {
+                    velocity.y = Math.random() * -20 - 5;
+                }
+
                 position.x += velocity.x * dt;
                 position.y += velocity.y * dt;
 
                 node.transform.setPosition(new Vector3(Math.floor(position.x), Math.floor(position.y), 0));
+
+                var x = velocity.x / Math.abs(velocity.x);
+                node.transform.setScale(new Vector3(x, 1, 1));
             }
         }
     }
@@ -59,13 +81,41 @@ class GameSystem extends System
     private function spawnFly()
     {
         var e = new Entity();
-        var position = new Vector3(Math.random() * 32, Math.random() * 32, 0);
+        var position:Vector3 = new Vector3(0, 0, 0);
+
+        if(Math.random() < 0.5)
+        {
+            position.x = Math.random() * 64 - 32;
+
+            if(Math.random() < 0.5)
+            {
+                position.y = border;
+            }
+            else
+            {
+                position.y = -border;
+            }
+        }
+        else
+        {
+            position.y = Math.random() * 64 - 32;
+
+            if(Math.random() < 0.5)
+            {
+                position.x = border;
+            }
+            else
+            {
+                position.x = -border;
+            }
+        }
+
         e.add(new Transform(position));
         e.add(new Fly());
         e.add(new AnimatedSprite2D(flyAnim, "fly"));
 
         e.get(AnimatedSprite2D).setLayer(10);
-        e.get(Fly).velocity = new Vector2(Math.random() * 10 - 5, Math.random() * 10 - 5);
+        e.get(Fly).velocity = new Vector2(Math.random() * 20 - 10, Math.random() * 20 - 10);
         e.get(Fly).position = position;
         engine.addEntity(e);
     }

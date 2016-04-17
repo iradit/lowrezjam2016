@@ -15,6 +15,7 @@ import components.*;
 class AttackSystem extends System
 {
     private var headNode:HeadNode;
+    private var tailNode:TailNode;
     private var tongueNode:TongueNode;
     private var tongueEntity:Entity;
     private var engine:Engine;
@@ -24,6 +25,7 @@ class AttackSystem extends System
     private var openedAngle:Float;
     private var currentAngle:Float;
     private var rotationSpeed:Float;
+    private var hasEaten:Bool;
 
     public function new()
     {
@@ -34,6 +36,7 @@ class AttackSystem extends System
     {
         engine = _engine;
         engine.getNodeList(HeadNode).nodeAdded.add(onNodeAdded);
+        engine.getNodeList(TailNode).nodeAdded.add(onTailAdded);
         engine.getNodeList(TongueNode).nodeAdded.add(onTongueAdded);
         engine.getNodeList(TongueNode).nodeRemoved.add(onTongueRemoved);
 
@@ -62,6 +65,7 @@ class AttackSystem extends System
                 headNode.animatedSprite2D.setAnimation("open", 2);
                 time = 0;
                 state = "opening";
+                hasEaten = false;
             }
         }
         else if(state == "opening")
@@ -81,6 +85,8 @@ class AttackSystem extends System
                 var deltaAngle = openedAngle - getClosestAngle(startAngle, openedAngle);
                 currentAngle = openedAngle;
                 rotationSpeed = deltaAngle / 0.5;
+
+                tailNode.animatedSprite2D.setAnimation("idle");
             }
         }
         else if(state == "opened")
@@ -91,7 +97,7 @@ class AttackSystem extends System
             currentAngle += rotationSpeed * dt;
             tongueNode.transform.setRotation2D(currentAngle);
 
-            if(time > tongue.openedDuration)
+            if(time >= tongue.openedDuration)
             {
                 time = 0;
                 state = "closing";
@@ -103,15 +109,16 @@ class AttackSystem extends System
             var tongue = tongueNode.tongue;
 
             time += dt;
+            time = Math.min(time, tongue.closingDuration);
+
             tongueNode.transform.setScale(new Vector3(((tongue.closingDuration - time) / tongue.closingDuration) * tongue.xScale, tongue.yScale, 1));
 
             currentAngle += rotationSpeed * dt;
             tongueNode.transform.setRotation2D(currentAngle);
 
-            if(time > tongue.closingDuration)
+            if(!hasEaten && time > tongue.closingDuration - 0.1)
             {
-                time = 0;
-                state = "closed";
+                var count = tongueNode.tongue.catchedFlies.length;
 
                 for(flyNode in tongueNode.tongue.catchedFlies)
                 {
@@ -119,6 +126,18 @@ class AttackSystem extends System
                 }
 
                 tongueNode.tongue.catchedFlies = [];
+                hasEaten = true;
+
+                if(count > 0)
+                {
+                    tailNode.animatedSprite2D.setAnimation("move");
+                }
+            }
+
+            if(time >= tongue.closingDuration)
+            {
+                time = 0;
+                state = "closed";
 
                 engine.removeEntity(tongueEntity);
             }
@@ -133,6 +152,11 @@ class AttackSystem extends System
     private function onNodeAdded(node:HeadNode):Void
     {
         headNode = node;
+    }
+
+    private function onTailAdded(node:TailNode):Void
+    {
+        tailNode = node;
     }
 
     private function onTongueAdded(node:TongueNode):Void

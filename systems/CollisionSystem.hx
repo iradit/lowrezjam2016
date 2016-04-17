@@ -40,17 +40,20 @@ class CollisionSystem extends System
 
             for(flyNode in flyNodes)
             {
-                var position = flyNode.fly.position;
-                var r = getIntersections(tonguePosition, tongueEnd, position, 3);
-                if(r)
+                if(!flyNode.fly.catched)
                 {
-                    flyNode.fly.velocity.x = 0;
-                    flyNode.fly.velocity.y = 0;
-                    flyNode.fly.catched = true;
-                    flyNode.transform.setParent(tongueNode.transform);
-                    flyNode.transform.setWorldPosition(new Vector3(position.x, position.y, 0));
-                    tongueNode.tongue.catchedFlies.push(flyNode);
-                    //engine.removeEntity(flyNode.entity);
+                    var position = flyNode.fly.position;
+                    var r = getIntersections(tonguePosition, tongueEnd, position, 2);
+                    if(r)
+                    {
+                        flyNode.fly.velocity.x = 0;
+                        flyNode.fly.velocity.y = 0;
+                        flyNode.fly.catched = true;
+                        flyNode.transform.setParent(tongueNode.transform);
+                        flyNode.transform.setWorldPosition(new Vector3(position.x, position.y, 0));
+                        flyNode.transform.setWorldScale(new Vector3(tongueScale * 2, 1, 1));
+                        tongueNode.tongue.catchedFlies.push(flyNode);
+                    }
                 }
             }
         }

@@ -59,6 +59,7 @@ class Application
         entity = new Entity();
         entity.add(new Transform(new Vector3(20, 10, 0)));
         entity.add(new AnimatedSprite2D(Gengine.getResourceCache().getAnimationSet2D('tail.scml', true), "idle"));
+        entity.add(new Tail());
         entity.get(AnimatedSprite2D).setLayer(0);
         engine.addEntity(entity);
 
