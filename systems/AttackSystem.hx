@@ -112,6 +112,14 @@ class AttackSystem extends System
             {
                 time = 0;
                 state = "closed";
+
+                for(flyNode in tongueNode.tongue.catchedFlies)
+                {
+                    engine.removeEntity(flyNode.entity);
+                }
+
+                tongueNode.tongue.catchedFlies = [];
+
                 engine.removeEntity(tongueEntity);
             }
         }

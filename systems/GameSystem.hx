@@ -43,13 +43,16 @@ class GameSystem extends System
 
         for(node in flyNodes)
         {
-            var position = node.fly.position;
-            var velocity = node.fly.velocity;
+            if(!node.fly.catched)
+            {
+                var position = node.fly.position;
+                var velocity = node.fly.velocity;
 
-            position.x += velocity.x * dt;
-            position.y += velocity.y * dt;
+                position.x += velocity.x * dt;
+                position.y += velocity.y * dt;
 
-            node.transform.setPosition(new Vector3(Math.floor(position.x), Math.floor(position.y), 0));
+                node.transform.setPosition(new Vector3(Math.floor(position.x), Math.floor(position.y), 0));
+            }
         }
     }
 

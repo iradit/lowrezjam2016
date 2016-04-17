@@ -46,6 +46,11 @@ class CollisionSystem extends System
                 {
                     flyNode.fly.velocity.x = 0;
                     flyNode.fly.velocity.y = 0;
+                    flyNode.fly.catched = true;
+                    flyNode.transform.setParent(tongueNode.transform);
+                    flyNode.transform.setWorldPosition(new Vector3(position.x, position.y, 0));
+                    tongueNode.tongue.catchedFlies.push(flyNode);
+                    //engine.removeEntity(flyNode.entity);
                 }
             }
         }
@@ -78,7 +83,7 @@ class CollisionSystem extends System
                 g.coords[1] = ((t+dt) * d[1]) + a[1];
                 g.onLine = this.is_on(a,b,g.coords);
 
-                return true;
+                return f.onLine || g.onLine;
             }
         ");
 
