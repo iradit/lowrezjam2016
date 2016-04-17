@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r3" pixel_mode="1">
     <folder id="0">
-        <file id="0" name="head.png" width="27" height="38" pivot_x="0" pivot_y="0.5"/>
-        <file id="1" name="head-open.png" width="27" height="41" pivot_x="0" pivot_y="0.5"/>
+        <file id="0" name="head.png" width="28" height="42" pivot_x="0.5" pivot_y="0.5"/>
+        <file id="1" name="head-open.png" width="28" height="42" pivot_x="0.5" pivot_y="0.5"/>
     </folder>
     <entity id="0" name="head">
         <animation id="0" name="open" length="200" interval="100">
@@ -16,28 +16,28 @@
             </mainline>
             <timeline id="0" name="head">
                 <key id="0" spin="0">
-                    <object folder="0" file="0"/>
+                    <object folder="0" file="0" x="0" y="0" angle="0"/>
                 </key>
                 <key id="1" time="100" spin="0">
-                    <object folder="0" file="1"/>
+                    <object folder="0" file="1" angle="0"/>
                 </key>
             </timeline>
         </animation>
         <animation id="1" name="close" length="200" interval="100">
             <mainline>
                 <key id="0">
-                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
                 </key>
                 <key id="1" time="100">
-                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
                 </key>
             </mainline>
             <timeline id="0" name="head">
                 <key id="0" spin="0">
-                    <object folder="0" file="0"/>
+                    <object folder="0" file="0" x="0" y="0" angle="0"/>
                 </key>
                 <key id="1" time="100" spin="0">
-                    <object folder="0" file="1"/>
+                    <object folder="0" file="1" x="0" y="0" angle="0"/>
                 </key>
             </timeline>
         </animation>
@@ -46,13 +46,16 @@
                 <key id="0">
                     <object_ref id="0" timeline="0" key="0" z_index="0"/>
                 </key>
+                <key id="1" time="1">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
             </mainline>
             <timeline id="0" name="head">
                 <key id="0" spin="0">
-                    <object folder="0" file="0"/>
+                    <object folder="0" file="0" x="0" y="0" angle="0"/>
                 </key>
-                <key id="1" time="100" spin="0">
-                    <object folder="0" file="1"/>
+                <key id="1" time="1" spin="0">
+                    <object folder="0" file="1" angle="0"/>
                 </key>
             </timeline>
         </animation>
